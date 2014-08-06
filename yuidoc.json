@@ -4,7 +4,8 @@
     "version": "0.0.0",
     "url": "https://github.com/gosukiwi",
     "options": {
-        "paths": "app/scripts",
+        "paths": ".",
+        "ignorePaths": ["doc"],
         "outdir": "doc"
     }
 }
