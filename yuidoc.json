@@ -1,0 +1,10 @@
+{
+    "name": "Backbone.ModalView",
+    "description": "Backbone modal views with no dependencies.",
+    "version": "0.0.0",
+    "url": "https://github.com/gosukiwi",
+    "options": {
+        "paths": "app/scripts",
+        "outdir": "doc"
+    }
+}

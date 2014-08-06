@@ -1,0 +1,11 @@
+{
+  "name": "backbone-modalview",
+  "private": false,
+  "version": "0.0.1",
+  "main": "backbone.modalview.js",
+  "dependencies": {
+    "jquery": "~1.11.0",
+    "backbone": "~1.1.2"
+  },
+  "devDependencies": {}
+}
