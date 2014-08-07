@@ -99,7 +99,7 @@
       // For modalHeader, modalContent and modalFooter options make getters and
       // setters named header, content and footer respectively.
       Object.keys(options).forEach(function (key) {
-        if(['modalHeader', 'modalContent', 'modalFooter'].indexOf(key) > -1) {
+        if(_.contains(['modalHeader', 'modalContent', 'modalFooter'], key)) {
           var name = key.replace('modal', '').toLowerCase();
           self[name] = function (c) {
             if(!c) {
