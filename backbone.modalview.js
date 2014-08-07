@@ -234,6 +234,10 @@
      * @method show
      */
     show: function () {
+      if(this.markup.$overlay.is(':visible')) {
+        throw 'Modal is already beeing displayed.';
+      }
+
       var modal = this.markup.$modal;
       modal.css({ marginTop: -(modal.outerHeight() + 200) });
 
