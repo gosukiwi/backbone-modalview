@@ -10,6 +10,11 @@ invoke a modal as follows:
 Because `ModalView` extends from `View` you get everything you would in a
 regular view.
 
+## Using With Bower
+You can include **Backbone.ModalView** using **Bower**: `$ bower install --save
+backbone-modalview`. For now it's better to always use the latest version as
+there's no stable version at the moment.
+
 ## API Documentation
 For the full API documentation you can run `yuidoc` from the repository folder
 to build a `doc/` directory with specific documentation on the full API.
