@@ -1,1 +1,22 @@
-.backbone-modal-overlay{display:none;background-color:rgba(0,0,0,0.8);position:absolute;top:0;left:0;right:0;bottom:0;z-index:9999}.backbone-modal-overlay .backbone-modal-container{background-color:white;border-radius:3px;padding:10px;margin:auto;width:600px;margin-top:30vh}.backbone-modal-overlay .backbone-modal-container h1{margin:0;padding:0 0 10px}.backbone-modal-overlay .backbone-modal-container .backbone-modal-footer{font-size:0.9em;text-align:right}
+.backbone-modal-overlay {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999; }
+  .backbone-modal-overlay .backbone-modal-container {
+    background-color: white;
+    border-radius: 3px;
+    padding: 10px;
+    margin: auto;
+    width: 600px;
+    margin-top: 30vh; }
+    .backbone-modal-overlay .backbone-modal-container h1 {
+      margin: 0;
+      padding: 0 0 10px; }
+    .backbone-modal-overlay .backbone-modal-container .backbone-modal-footer {
+      font-size: 0.9em;
+      text-align: right; }
