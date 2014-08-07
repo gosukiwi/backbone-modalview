@@ -88,54 +88,45 @@
      *     });
      */
     initialize: function (options) {
-      options = options || {};
+      // Call parent constructor
+      Backbone.View.prototype.initialize.apply(this, arguments);
 
       var self = this;
-      Object.keys(options).forEach(function (key) {
-        if(['modalHeader', 'modalContent', 'modalFooter'].indexOf(key) > -1) {
-          self[key] = options[key];
-        }
-      });
 
-      // Make a getter-setter for modalHeader
-      if(this.modalHeader) {
-        var header = this.modalHeader;
-        this.modalHeader = function (tpl) {
-          if(tpl && tpl !== header) {
-            header = tpl;
-            self.trigger('modal:headerchanged', header);
-            return self;
+      // Make sure the options arguments defaults to an empty object
+      options = options || {};
+
+      // TODO: Don't repeat this 3 times...
+      if(options.modalHeader) {
+        this.header = function (header) {
+          if(!header) {
+            return options.modalHeader;
           }
 
-          return header;
+          options.modalHeader = header;
+          self.trigger('modal:headerchanged', header);
         };
       }
 
-      // Make a getter-setter for modalContent
-      if(this.modalContent) {
-        var content = this.modalContent;
-        this.modalContent = function (tpl) {
-          if(tpl && tpl !== content) {
-            content = tpl;
-            self.trigger('modal:contentchanged', content);
-            return self;
+      if(options.modalContent) {
+        this.content = function (content) {
+          if(!content) {
+            return options.modalContent;
           }
 
-          return content;
+          options.modalContent = content;
+          self.trigger('modal:contentchanged', content);
         };
       }
 
-      // Make a getter-setter for modalFooter
-      if(this.modalFooter) {
-        var footer = this.modalFooter;
-        this.modalFooter = function (tpl) {
-          if(tpl && tpl !== footer) {
-            footer = tpl;
-            self.trigger('modal:footerchanged', footer);
-            return self;
+      if(options.modalFooter) {
+        this.footer = function (footer) {
+          if(!footer) {
+            return options.modalFooter;
           }
 
-          return footer;
+          options.modalFooter = footer;
+          self.trigger('modal:footerchanged', footer);
         };
       }
 
@@ -172,16 +163,16 @@
      * @method render
      */
     render: function () {
-      if(this.modalHeader) {
-        this.drawHeader(this.modalHeader());
+      if(this.header) {
+        this.drawHeader(this.header());
       }
 
-      if(this.modalContent) {
-        this.drawContent(this.modalContent());
+      if(this.content) {
+        this.drawContent(this.content());
       }
 
-      if(this.modalFooter) {
-        this.drawFooter(this.modalFooter());
+      if(this.footer) {
+        this.drawFooter(this.footer());
       }
     },
 
@@ -359,8 +350,8 @@
     },
 
     prompt: function (cb) {
-      this.cb = cb;
       this.show();
+      this.cb = cb;
     },
 
     events: {
