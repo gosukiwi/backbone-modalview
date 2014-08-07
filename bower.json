@@ -1,5 +1,10 @@
 {
   "name": "backbone-modalview",
+  "authors": "Federico Ramirez <fedra.arg@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gosukiwi/backbone-modalview"
+  },
   "private": false,
   "version": "0.0.1",
   "main": "backbone.modalview.js",
