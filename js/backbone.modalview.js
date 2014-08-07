@@ -143,6 +143,7 @@
      * content.
      *
      * @method render
+     * @protected
      */
     render: function () {
       if(this.header) {
@@ -163,6 +164,7 @@
      * setter for the header.
      *
      * @method drawHeader
+     * @protected
      * @param {String} The header's text
      */
     drawHeader: function (content) {
@@ -174,6 +176,7 @@
      * setter for the content.
      *
      * @method drawContent
+     * @protected
      * @param {String} The modal's main HTML
      */
     drawContent: function (content) {
@@ -185,6 +188,7 @@
      * setter for the footer.
      *
      * @method drawFooter
+     * @protected
      * @param {String} The footer's HTML content
      */
     drawFooter: function (content) {
