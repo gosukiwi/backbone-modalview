@@ -1,17 +1,11 @@
 /* global define */
 /**
- * Backbone.ModalView is just a View which is displayed in a modal manner.
- * You can use it just as any other view, this view also has the following
- * methods:
- *
- *  * show: Displays the modal view
- *  * hide: Hides the modal view
- *  * modalHeader: getter and setter for the header part of the modal
- *  * modalContent: getter and setter for the content part of the modal
- *  * modalFooter: getter and setter for the footer part of the modal
+ * This file implements ModalView and some related classes to work with Modals
+ * in Backbone. The only dependency is the attached `.css` file but you could
+ * always see the markup and implement your own version or extend this one.
  *
  * For more information on the API please look at the docs or generate them
- * using `yuidoc`.
+ * using `yuidoc` with no arguments.
  *
  * @author: Federico Ramirez <fedra.arg@gmail.com>
  * @licence: MIT
@@ -73,13 +67,14 @@
      * Display a Backbone view in a modal fashion.
      *
      * @class ModalView
+     * @extends Backbone.View
      * @constructor
      * @params {Object} options Configuration options for this view, these
      * include:
      *
-     *  * modalHeader
-     *  * modalContent
-     *  * modalFooter
+     *  * modalHeader: The HTML content for the header of the modal
+     *  * modalContent: The HTML content for the body of the modal
+     *  * modalFooter: The HTML content for the footer of the modal
      *
      * For example
      *
@@ -90,6 +85,9 @@
     initialize: function (options) {
       // Call parent constructor
       Backbone.View.prototype.initialize.apply(this, arguments);
+
+      // Set version number
+      this.MODAL_VERSION = '0.0.1';
 
       var self = this;
 
@@ -140,7 +138,9 @@
     },
 
     /**
-     * Draw all the modal box
+     * Draw the whole modal box, normally you won't need to call this method
+     * manually as long as you use the getters and setters to update the modal
+     * content.
      *
      * @method render
      */
@@ -233,17 +233,18 @@
   var ModalConfirmView = Backbone.ModalView.extend({
 
     /**
-     * Creates a modal view with buttons attached.
+     * Creates a modal view with buttons in the footer.
      *
      * @class ModalConfirmView
-     * @constructor 
      * @extends Backbone.ModalView 
+     * @constructor 
      *
      * @param {Object} [options] Configuration options for this view. These
      * include:
      *
-     *  * onButtonPressed
-     *  * buttons
+     *  * onButtonPressed: Gets called when the user clicks any button
+     *  * buttons: An array of strings defining the buttons to show in the
+     *  footer
      *  * all of ModalView's options
      */
     initialize: function (options) {
@@ -278,6 +279,7 @@
      */
     buttons: ['OK', 'Cancel'],
 
+    // Internal event handling for this instance
     events: {
       'click .modal-button': function (e) {
         this.trigger('button-press', $(e.currentTarget));
@@ -296,14 +298,12 @@
      * Creates a prompt view
      *
      * @class ModalPromptView
-     * @constructor 
      * @extends Backbone.ModalConfirmView 
+     * @constructor 
      *
      * @param {Object} [options] Configuration options for this view. These
      * include:
      *
-     *  * yes: A callback function for the
-     *  * no
      *  * all of ModalPromptView's options
      */
     initialize: function (options) {
@@ -331,6 +331,28 @@
       });
     },
 
+
+    /**
+     * Prompts the alert and when done calls an specified callback with the
+     * dialog result.
+     * The first parameter of the callback is called `err`, if err evaluates to 
+     * true, then the user cancelled the prompt, otherwise she accepted.
+     *
+     * Example:
+     * 
+     *     var modal = new Backbone.ModalPromptView({ modalContent: 'Are you sure?' });
+     *     modal.prompt(function (err) {
+     *       if(err) {
+     *         console.log('The user clicked 'Cancel'');
+     *       } else {
+     *         console.log('The user clicked 'OK'!');
+     *       }
+     *     });
+     *
+     * @method prompt
+     * @param {Function} callback The function which will be called when the
+     * user closes the prompt and chooses an option.     
+     */
     prompt: function (cb) {
       this.show();
       this.cb = cb;
