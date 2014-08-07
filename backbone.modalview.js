@@ -16,7 +16,7 @@
  * @author: Federico Ramirez <fedra.arg@gmail.com>
  * @licence: MIT
  */
-(function(root, modalViewFactory, modalConfirmViewFactory) {
+(function(root, modalViewFactory, modalConfirmViewFactory, modalPromptViewFactory) {
   'use strict';
 
   // Check for AMD
@@ -24,12 +24,14 @@
     define(['backbone', 'underscore', 'jquery'], function(Backbone, _, $) {
       Backbone.ModalView = modalViewFactory(Backbone, _, $);
       Backbone.ModalConfirmView = modalConfirmViewFactory(Backbone, _, $);
+      Backbone.ModalPromptView = modalPromptViewFactory(Backbone, _, $);
     });
 
   // Not AMD? Assume browser
   } else {
     root.Backbone.ModalView = modalViewFactory(root.Backbone, root._, (root.jQuery || root.Zepto || root.ender || root.$));
     root.Backbone.ModalConfirmView = modalConfirmViewFactory(root.Backbone, root._, (root.jQuery || root.Zepto || root.ender || root.$));
+    root.Backbone.ModalPromptView = modalPromptViewFactory(root.Backbone, root._, (root.jQuery || root.Zepto || root.ender || root.$));
   }
 
 }(this, function(Backbone, _, $) {
@@ -86,6 +88,8 @@
      *     });
      */
     initialize: function (options) {
+      options = options || {};
+
       var self = this;
       Object.keys(options).forEach(function (key) {
         if(['modalHeader', 'modalContent', 'modalFooter'].indexOf(key) > -1) {
@@ -268,8 +272,15 @@
     initialize: function (options) {
       Backbone.ModalView.prototype.initialize.apply(this, arguments);
 
+      // If buttons were not defined, use 'OK' and 'Cancel' as default
+      if(!_.isArray(options.buttons)) {
+        options.buttons = ['OK', 'Cancel'];
+      }
+      this.buttons = options.buttons;
+
+      // Draw the buttons
       var markup = '';
-      this.buttons.forEach(function (button) {
+      options.buttons.forEach(function (button) {
         markup += '<a href="javascript://" class="modal-button" data-name="' + 
           button + '">' + button + '</a>';
       });
@@ -278,10 +289,6 @@
 
       if(options.onButtonPressed) {
         this.on('button-press', options.onButtonPressed);
-      }
-
-      if(_.isArray(options.buttons)) {
-        this.buttons = options.buttons;
       }
     },
 
@@ -303,4 +310,69 @@
   });
 
   return ModalConfirmView;
+}, function (Backbone, _/*, $*/) {
+  'use strict';
+
+  var ModalPromptView = Backbone.ModalView.extend({
+
+    /**
+     * Creates a prompt view
+     *
+     * @class ModalPromptView
+     * @constructor 
+     * @extends Backbone.ModalConfirmView 
+     *
+     * @param {Object} [options] Configuration options for this view. These
+     * include:
+     *
+     *  * yes: A callback function for the
+     *  * no
+     *  * all of ModalPromptView's options
+     */
+    initialize: function (options) {
+      Backbone.ModalConfirmView.prototype.initialize.call(this, options);
+
+      // Save the buttons names, we'll need them later on
+      this.btnOK      = this.buttons[0];
+      this.btnCancel  = this.buttons[1];
+
+      // When the prompt gets a response either accept or cancel
+      this.on('confirmed', function () {
+        if(_.isFunction(this.cb)) {
+          this.cb();
+        }
+
+        this.hide();
+      });
+
+      this.on('canceled', function () {
+        if(_.isFunction(this.cb)) {
+          this.cb(1);
+        }
+
+        this.hide();
+      });
+    },
+
+    prompt: function (cb) {
+      this.cb = cb;
+      this.show();
+    },
+
+    events: {
+      'click .modal-button': function (e) {
+        var $btn = $(e.currentTarget);
+        this.trigger('button-press', $btn);
+
+        if($btn.data('name') === this.btnOK) {
+          this.trigger('confirmed');
+        } else if($btn.data('name') === this.btnCancel) {
+          this.trigger('canceled');
+        }
+      }
+    }
+
+  });
+
+  return ModalPromptView;
 }));
