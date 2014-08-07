@@ -96,39 +96,21 @@
       // Make sure the options arguments defaults to an empty object
       options = options || {};
 
-      // TODO: Don't repeat this 3 times...
-      if(options.modalHeader) {
-        this.header = function (header) {
-          if(!header) {
-            return options.modalHeader;
-          }
+      // For modalHeader, modalContent and modalFooter options make getters and
+      // setters named header, content and footer respectively.
+      Object.keys(options).forEach(function (key) {
+        if(['modalHeader', 'modalContent', 'modalFooter'].indexOf(key) > -1) {
+          var name = key.replace('modal', '').toLowerCase();
+          self[name] = function (c) {
+            if(!c) {
+              return options[key];
+            }
 
-          options.modalHeader = header;
-          self.trigger('modal:headerchanged', header);
-        };
-      }
-
-      if(options.modalContent) {
-        this.content = function (content) {
-          if(!content) {
-            return options.modalContent;
-          }
-
-          options.modalContent = content;
-          self.trigger('modal:contentchanged', content);
-        };
-      }
-
-      if(options.modalFooter) {
-        this.footer = function (footer) {
-          if(!footer) {
-            return options.modalFooter;
-          }
-
-          options.modalFooter = footer;
-          self.trigger('modal:footerchanged', footer);
-        };
-      }
+            options[key] = c;
+            self.trigger('modal:' + name + 'changed', c);
+          };
+        }
+      });
 
       // Pubsub events
       pubsub.on('hidemodal', function () {
