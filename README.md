@@ -24,16 +24,16 @@ If you want to extend ModalView to add custom functionality you can do so as
 follows:
 
 
-  var MySuperModalView = Backbone.ModalView.extend({
+    var MySuperModalView = Backbone.ModalView.extend({
 
-    initialize: function (options) {
-      // Call base constructor in this context
-      Backbone.ModalView.prototype.initialize.apply(this, arguments);
+      initialize: function (options) {
+        // Call base constructor in this context
+        Backbone.ModalView.prototype.initialize.apply(this, arguments);
 
-      // Your code here...
-    }
+        // Your code here...
+      }
 
-  });
+    });
 
 # Styling the modal
 Just modify `backbone.modalview.css` as needed, it's designed to be simple to
